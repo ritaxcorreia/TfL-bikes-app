@@ -3,23 +3,19 @@
 // 1. Get user’s location.
 
 if (navigator.geolocation) {
-	// const success = (data) => console.log(data);
-	// const error = (err) => console.log(err);
-	// const options = { timeout: 5000 };
-
 	// handles the success case and the error case, and if it timesout
 	navigator.geolocation.getCurrentPosition(createMap, logError);
 } else {
 	// handle UI if navigator.geolocation is not available
+	logError();
 }
 
-//logs Error
+// logs Error
 function logError(err) {
 	console.log("Error occurred fetching location", err);
 }
 
-// 2. Render a Google map.
-// 3. Center Google Maps on user’s location
+// 2. Render a Google map and center Google Maps on user’s location
 let map;
 let marker;
 
@@ -33,14 +29,14 @@ function createMap(position) {
 	getBikeData();
 }
 
-// 4. Create request to TFL for bike information.
+// 3. Create request to TFL for bike information.
 function getBikeData() {
 	fetch("https://api.tfl.gov.uk/bikepoint")
 		.then((response) => response.json())
 		.then(addBikeMarkers);
 }
 
-// 5. Parse API response and add locations to map.
+// 4. Parse API response and add locations to map.
 function addBikeMarkers(bikepoints) {
 	bikepoints.forEach((bikepoint) => {
 		const bikeLocation = { lat: bikepoint.lat, lng: bikepoint.lon };
@@ -54,7 +50,7 @@ function addBikeMarkers(bikepoints) {
 	});
 }
 
-// 6. Create an information window for when a user selects a bike point
+// 5. Create an information window for when a user selects a bike point
 
 function createBikeInfo(bikepoint, marker) {
 	console.log(bikepoint);
@@ -82,6 +78,7 @@ function createBikeInfo(bikepoint, marker) {
 	};
 
 	console.log("marker is", marker);
+
 	// This will add the bike info to each marker, when the user clicks on it
 	marker.addListener("click", () => {
 		createInfoWindowForMarker(marker, bikepoint, bikeInfo);
